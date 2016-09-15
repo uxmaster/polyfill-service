@@ -237,7 +237,7 @@ function getCompat() {
 		'missing': 'Not supported'
 	};
 	return Promise.all(Object.keys(compatdata)
-		.filter(feature => sourceslib.polyfillExistsSync(feature) && feature.indexOf('_') !== 0)
+		.filter(feature => sourceslib.polyfillExists(feature) && feature.indexOf('_') !== 0)
 		.sort()
 		.map(feat => {
 			return sourceslib.getPolyfill(feat).then(polyfill => {
