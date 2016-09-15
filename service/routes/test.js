@@ -29,7 +29,7 @@ function createEndpoint(type, polyfillio) {
 		if (mode === 'targeted') {
 			featureListPromise = polyfillio.getPolyfills({uaString, features: {all: {flags: []}} }).then(set => Object.keys(set));
 		} else {
-			featureListPromise = polyfillio.listAllPolyfills();
+			featureListPromise = Promise.resolve(polyfillio.listAllPolyfills());
 		}
 
 		featureListPromise
