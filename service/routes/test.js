@@ -40,7 +40,8 @@ function createEndpoint(type, polyfillio) {
 
 				// Fetch polyfill configs for all the features to be tested
 				return Promise.all(featuresList.map(featureName => {
-					return polyfillio.describePolyfill(featureName).then(config => ({[featureName]: config}) );
+					const config = polyfillio.describePolyfill(featureName);
+					return {[featureName]: config};
 				})).then(featureObjs => Object.assign({}, ...featureObjs));
 			})
 			.then(polyfillSet => {

@@ -198,7 +198,7 @@ function getData(type) {
 						row['perf_'+key+'_95_display_pc'] = Math.round((row['perf_'+key+'_95'] / highest) * 1000) / 10;
 					});
 					return Object.assign({}, row);
-				})
+				});
 			});
 		},
 		compat: getCompat
@@ -229,7 +229,7 @@ function getData(type) {
 }
 
 function getCompat() {
-	const sourceslib = sources.getCollection();
+	const sourceslib = sources;
 	const browsers = ['ie', 'firefox', 'chrome', 'safari', 'opera', 'ios_saf'];
 	const msgs = {
 		'native': 'Supported natively',
@@ -298,7 +298,6 @@ function route(req, res, next) {
 		// Add page-specific data
 		.then(locals => {
 			if (locals.pageName === 'usage') {
-
 				// Set the ttl to one hour for the usage page so the graphs are
 				// updated more frequently, overriding the default cache-control
 				// behaviour set in index.js

@@ -133,28 +133,26 @@ function Compat() {
 		.then(results => {
 			return dbconn.end().then(() => {
 				return Promise.all(results[0].map(rec => {
-					return polyfillio.describePolyfill(rec.feature_name)
-					.then(polyfill => {
-						if (!polyfill) {
-							return null;
+					const polyfill = polyfillio.describePolyfill(rec.feature_name);
+					if (!polyfill) {
+						return null;
+					} else {
+						const ua = new UA(rec.ua_family + '/' + rec.ua_version);
+						const isTargeted = (polyfill.browsers && polyfill.browsers[rec.ua_family] && ua.satisfies(polyfill.browsers[rec.ua_family]));
+						rec.is_targeted = isTargeted ? 'Yes' : 'No';
+						if (rec.ip_count < 5) {
+							rec.targeting_status = 'Not enough data';
+						} else if ((isTargeted && rec.pass_rate < 0.2) || (!isTargeted && rec.pass_rate > 0.8)) {
+							rec.targeting_status = 'Correct';
+						} else if (isTargeted && rec.pass_rate > 0.8) {
+							rec.targeting_status = 'False positive';
+						} else if (!isTargeted && rec.pass_rate < 0.2) {
+							rec.targeting_status = 'False negative';
 						} else {
-							const ua = new UA(rec.ua_family + '/' + rec.ua_version);
-							const isTargeted = (polyfill.browsers && polyfill.browsers[rec.ua_family] && ua.satisfies(polyfill.browsers[rec.ua_family]));
-							rec.is_targeted = isTargeted ? 'Yes' : 'No';
-							if (rec.ip_count < 5) {
-								rec.targeting_status = 'Not enough data';
-							} else if ((isTargeted && rec.pass_rate < 0.2) || (!isTargeted && rec.pass_rate > 0.8)) {
-								rec.targeting_status = 'Correct';
-							} else if (isTargeted && rec.pass_rate > 0.8) {
-								rec.targeting_status = 'False positive';
-							} else if (!isTargeted && rec.pass_rate < 0.2) {
-								rec.targeting_status = 'False negative';
-							} else {
-								rec.targeting_status = 'Inconclusive';
-							}
-							return rec;
+							rec.targeting_status = 'Inconclusive';
 						}
-					});
+						return rec;
+					}
 				}));
 			});
 		})
