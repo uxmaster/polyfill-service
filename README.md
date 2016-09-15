@@ -195,7 +195,7 @@ require('polyfill-service').getPolyfills({
 
 #### `listAllPolyfills()` (method)
 
-Return a promise of an array all the polyfills as an array of strings. This list corresponds to directories and subdirectories in the `/polyfills` directory.
+Return all the polyfills as an array of strings. This list corresponds to directories and subdirectories in the `/polyfills` directory.
 
 Example:
 
