@@ -69,19 +69,17 @@ router.get(/^\/v2\/polyfill(\.\w+)(\.\w+)?/, (req, res) => {
 		metrics.counter('useragentcount.'+polyfillio.normalizeUserAgent(uaString).replace(/^(.*?)\/(\d+)(\..*)?$/, '$1.$2')).inc();
 	}
 
-	polyfillio.getPolyfillString(params).then(op => {
-		if (warnings.length) {
-			op = '/* WARNINGS:\n\n- ' + warnings.join('\n- ') + '\n\n*/\n\n' + op;
-		}
-		if (req.query.callback && req.query.callback.match(/^[\w\.]+$/)) {
-			op += "\ntypeof "+req.query.callback+"==='function' && "+req.query.callback+"();";
-		}
-		res.set('Content-Type', contentTypes[fileExtension]+';charset=utf-8');
-		res.set('Access-Control-Allow-Origin', '*');
-		res.send(op);
-		respTimeTimer.end();
-	});
-
+	let op = polyfillio.getPolyfillString(params);
+	if (warnings.length) {
+		op = '/* WARNINGS:\n\n- ' + warnings.join('\n- ') + '\n\n*/\n\n' + op;
+	}
+	if (req.query.callback && req.query.callback.match(/^[\w\.]+$/)) {
+		op += "\ntypeof "+req.query.callback+"==='function' && "+req.query.callback+"();";
+	}
+	res.set('Content-Type', contentTypes[fileExtension]+';charset=utf-8');
+	res.set('Access-Control-Allow-Origin', '*');
+	res.send(op);
+	respTimeTimer.end();
 });
 
 router.get("/v2/normalizeUa", (req, res) => {

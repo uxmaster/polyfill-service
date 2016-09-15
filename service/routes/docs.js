@@ -240,37 +240,36 @@ function getCompat() {
 		.filter(feature => sourceslib.polyfillExists(feature) && feature.indexOf('_') !== 0)
 		.sort()
 		.map(feat => {
-			return sourceslib.getPolyfill(feat).then(polyfill => {
-				const fdata = {
-					feature: feat,
-					slug: feat.replace(/[^\w]/g, '_'),
-					size: polyfill.minSource.length,
-					isDefault: (polyfill.aliases && polyfill.aliases.indexOf('default') !== -1),
-					hasTests: polyfill.hasTests,
-					docs: polyfill.docs,
-					baseDir: polyfill.baseDir,
-					spec: polyfill.spec,
-					notes: polyfill.notes ? polyfill.notes.map(function (n) { return marked(n); }) : [],
-					license: polyfill.license,
-					licenseIsUrl: polyfill.license && polyfill.license.length > 5
-				};
-				browsers.forEach(browser => {
-					if (compatdata[feat][browser]) {
-						fdata[browser] = [];
-						Object.keys(compatdata[feat][browser])
-							.sort((a, b) => isNaN(a) ? 1 : (isNaN(b) || parseFloat(a) < parseFloat(b)) ? -1 : 1)
-							.forEach(version => {
-								fdata[browser].push({
-									status: compatdata[feat][browser][version],
-									statusMsg: msgs[compatdata[feat][browser][version]],
-									version: version
-								});
+			const polyfill = sourceslib.getPolyfill(feat);
+			const fdata = {
+				feature: feat,
+				slug: feat.replace(/[^\w]/g, '_'),
+				size: polyfill.minSource.length,
+				isDefault: (polyfill.aliases && polyfill.aliases.indexOf('default') !== -1),
+				hasTests: polyfill.hasTests,
+				docs: polyfill.docs,
+				baseDir: polyfill.baseDir,
+				spec: polyfill.spec,
+				notes: polyfill.notes ? polyfill.notes.map(function (n) { return marked(n); }) : [],
+				license: polyfill.license,
+				licenseIsUrl: polyfill.license && polyfill.license.length > 5
+			};
+			browsers.forEach(browser => {
+				if (compatdata[feat][browser]) {
+					fdata[browser] = [];
+					Object.keys(compatdata[feat][browser])
+						.sort((a, b) => isNaN(a) ? 1 : (isNaN(b) || parseFloat(a) < parseFloat(b)) ? -1 : 1)
+						.forEach(version => {
+							fdata[browser].push({
+								status: compatdata[feat][browser][version],
+								statusMsg: msgs[compatdata[feat][browser][version]],
+								version: version
 							});
-						;
-					}
-				});
-				return fdata;
+						});
+					;
+				}
 			});
+			return fdata;
 		})
 	);
 }

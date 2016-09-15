@@ -3,6 +3,8 @@
 'use strict';
 
 const express = require('express');
+const polyfillio = require('../../lib/index');
+const UA = require('../../lib/UA');
 
 let mysql;
 if (process.env.RUM_MYSQL_DSN) {
@@ -68,9 +70,8 @@ router.get('/v2/getRumCompatData', (req, res) => {
 	`;
 	mysql.query(querySQL)
 		.then(results => {
-			return Promise.all(results.map(rec => {
-				return polyfillio.describePolyfill(rec.feature_name)
-				.then(polyfill => {
+			return results.map(rec => {
+				const polyfill = polyfillio.describePolyfill(rec.feature_name);
 					if (!polyfill) {
 						return null;
 					} else {
@@ -90,8 +91,7 @@ router.get('/v2/getRumCompatData', (req, res) => {
 						}
 						return rec;
 					}
-				});
-			}));
+			});
 		})
 		.then(results => results.filter(rec => rec !== null))
 		.then(toCSV.bind(null, req.query.headerrow))
