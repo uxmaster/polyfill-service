@@ -204,4 +204,30 @@
 			return true;
 		};
 	}
+	var supportEventListenerOptions = false;
+	try {
+		window.addEventListener("test", null, Object.defineProperty({}, 'capture', {
+			get: function () {
+				supportEventListenerOptions = true;
+			}
+		}));
+	} catch (e) { }
+	if (!supportEventListenerOptions) {
+		var addEventListener = window.addEventListener;
+		window.addEventListener = Window.prototype.addEventListener = Document.prototype.addEventListener = Element.prototype.addEventListener = function addEventListener (type, listener) {
+			var opts = arguments[2];
+			if (opts instanceof Object) {
+				opts = opts.capture;
+			}
+			return addEventListener.call(this, type, listener, opts);
+		}
+		var removeEventListener = window.removeEventListener;
+		window.removeEventListener = Window.prototype.removeEventListener = Document.prototype.removeEventListener = Element.prototype.removeEventListener = function removeEventListener (type, listener) {
+			var opts = arguments[2];
+			if (opts instanceof Object) {
+				opts = opts.capture;
+			}
+			return removeEventListener.call(this, type, listener, opts);
+		}
+	}
 }());
