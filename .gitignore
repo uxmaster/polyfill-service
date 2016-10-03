@@ -22,3 +22,4 @@ node_modules/
 /polyfills/JSON/polyfill.js
 /polyfills/UserTiming/polyfill.js
 /polyfills/URL/polyfill.js
+.vscode/launch.json
