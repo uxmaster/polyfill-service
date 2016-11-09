@@ -1,5 +1,6 @@
 'use strict';
 
+const os = require('os');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -23,7 +24,7 @@ const installPolyfill = function(grunt, polyfillOutputFolder, { module, paths:po
 	polyfillSourcePaths = polyfillSourcePaths.map(path => require.resolve(path));
 
 	grunt.log.writeln(`Creating polyfill for ${path.basename(polyfillOutputFolder)}:
-	importing polyfill/s from ${polyfillSourcePaths.map(p => path.relative(__dirname, p)).join(',\n')}`);
+	importing polyfill/s from ${polyfillSourcePaths.map(p => path.relative(__dirname, p)).join(',' + os.EOL)}`);
 	const newPolyfill = loadSource(polyfillSourcePaths);
 
 	if (polyfillAlreadyExists) {

@@ -2,6 +2,7 @@
 
 'use strict';
 
+const os = require('os');
 const polyfillio = require('../../lib');
 const PolyfillSet = require('../PolyfillSet');
 const metrics = require('../metrics');
@@ -26,7 +27,9 @@ router.get(/^\/v1\/(.*)/, (req, res) => {
 	res.status(301);
 	res.set('Location', redirPath);
 	res.set('Deprecation-Notice', 'API version 1 has been decommissioned - see the body of this response for more information.');
-	res.send('API version 1 has been decommissioned. Your request is being redirected to v2.  The `libVersion` and `gated` query string parameters are no longer supported and if present have been removed from your request.\n\nA deprecation period for v1 existed between August and December 2015, during which time v1 requests were honoured but a deprecation warning was added to output.');
+	res.send(`API version 1 has been decommissioned. Your request is being redirected to v2.  The \`libVersion\` and \`gated\` query string parameters are no longer supported and if present have been removed from your request.
+
+	A deprecation period for v1 existed between August and December 2015, during which time v1 requests were honoured but a deprecation warning was added to output.`);
 });
 
 router.get(/^\/v2\/polyfill(\.\w+)(\.\w+)?/, (req, res) => {
@@ -75,7 +78,7 @@ router.get(/^\/v2\/polyfill(\.\w+)(\.\w+)?/, (req, res) => {
 	outputStream.pipe(res, {end: false});
 	outputStream.on('end', () => {
 		if (req.query.callback && req.query.callback.match(/^[\w\.]+$/)) {
-			res.write("\ntypeof "+req.query.callback+"==='function' && "+req.query.callback+"();");
+			res.write(`${os.EOL}typeof ${req.query.callback}==='function' && ${req.query.callback}();`);
 		}
 		res.end();
 		respTimeTimer.end();

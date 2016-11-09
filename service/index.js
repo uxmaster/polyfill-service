@@ -1,5 +1,6 @@
 'use strict';
 
+const os = require('os');
 const express = require('express');
 const path = require('path');
 const Raven = require('raven');
@@ -71,7 +72,7 @@ function startService(port, callback) {
 			callback(err);
 		})
 		.on('clientError', function (ex, sock) {
-			sock.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+			sock.end(`HTTP/1.1 400 Bad Request${os.EOL}${os.EOL}`);
 			sock.destroy();
 		})
 	;

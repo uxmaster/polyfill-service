@@ -2,6 +2,7 @@
 
 'use strict';
 
+const os = require('os');
 const express = require('express');
 const path = require('path');
 
@@ -17,7 +18,7 @@ const serviceInfo = Object.assign({}, require(path.join(__dirname, '../../about.
 // as some sites need polyfills in order to be indexable!
 router.get('/robots.txt', (req, res) => {
     res.type('text/plain');
-    res.send("User-agent: *\nDisallow:");
+    res.send(`User-agent: *${os.EOL}Disallow:`);
 });
 
 // Service description metadata

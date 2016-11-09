@@ -2,6 +2,7 @@
 
 'use strict';
 
+const os = require('os');
 const express = require('express');
 const RumReport = require('../RumReport');
 
@@ -42,10 +43,10 @@ router.get('/v2/getRumCompatData', (req, res) => {
 
 function toCSV(includeHeader, data) {
 	const keys = Object.keys(data[0]);
-	const headerRow = keys.map(key => `"${key}"`).join(",") + '\n';
+	const headerRow = keys.map(key => `"${key}"`).join(",") + os.EOL;
 	const dataRows = data.map(row => {
 		return keys.map(key => (row[key] === null) ? '' : `"${row[key]}"`).join(",");
-	}).join('\n');
+	}).join(os.EOL);
 
 	return ((includeHeader && includeHeader !== "0") ? headerRow : '') + dataRows;
 }

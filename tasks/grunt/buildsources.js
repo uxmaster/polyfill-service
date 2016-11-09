@@ -1,5 +1,6 @@
 'use strict';
 
+const os = require('os');
 const fs = require('graceful-fs');
 const path = require('path');
 const uglify = require('uglify-js');
@@ -55,7 +56,7 @@ function checkForCircularDependencies(polyfills) {
         return Promise.resolve();
     }
     catch (err) {
-        return Promise.reject('\nThere is a circle in the dependency graph.\nCheck the `dependencies` property of polyfill config files that have recently changed, and ensure that they do not form a circle of references.');
+        return Promise.reject(`${os.EOL}There is a circle in the dependency graph.${os.EOL}Check the \`dependencies\` property of polyfill config files that have recently changed, and ensure that they do not form a circle of references.`);
     }
 }
 
@@ -140,18 +141,18 @@ class Polyfill {
                 };
             })
             .then(raw => this.transpile(raw))
-            .catch(error => { 
-                throw { 
-                    message: `Error transpiling ${this.name}`, 
-                    error 
-                }; 
+            .catch(error => {
+                throw {
+                    message: `Error transpiling ${this.name}`,
+                    error
+                };
             })
             .then(transpiled => this.minify(transpiled))
-            .catch(error => { 
-                throw { 
-                    message: `Error minifying ${this.name}`, 
-                    error 
-                }; 
+            .catch(error => {
+                throw {
+                    message: `Error minifying ${this.name}`,
+                    error
+                };
             })
             .then(sources => {
                 this.sources = sources;
@@ -159,12 +160,12 @@ class Polyfill {
     }
 
     transpile(source) {
-        // At time of writing no current browsers support the full ES6 language syntax, 
-        // so for simplicity, polyfills written in ES6 will be transpiled to ES5 in all 
-        // cases (also note that uglify currently cannot minify ES6 syntax).  When browsers 
-        // start shipping with complete ES6 support, the ES6 source versions should be served 
-        // where appropriate, which will require another set of variations on the source properties 
-        // of the polyfill.  At this point it might be better to create a collection of sources with 
+        // At time of writing no current browsers support the full ES6 language syntax,
+        // so for simplicity, polyfills written in ES6 will be transpiled to ES5 in all
+        // cases (also note that uglify currently cannot minify ES6 syntax).  When browsers
+        // start shipping with complete ES6 support, the ES6 source versions should be served
+        // where appropriate, which will require another set of variations on the source properties
+        // of the polyfill.  At this point it might be better to create a collection of sources with
         // different properties, eg config.sources = [{code:'...', esVersion:6, minified:true},{...}] etc.
         if (this.config.esversion && this.config.esversion > 5) {
             if (this.config.esversion === 6) {
@@ -186,13 +187,13 @@ class Polyfill {
     }
 
     minify(source) {
-        const raw = `\n// ${this.name}\n${source}`;
+        const raw = `${os.EOL}// ${this.name}${os.EOL}${source}`;
 
         if (this.config.build && this.config.build.minify === false) {
             // skipping any validation or minification process since
             // the raw source is supposed to be production ready.
             // Add a line break in case the final line is a comment
-            return { raw, min: source + '\n' };
+            return { raw, min: source + os.EOL };
         }
         else {
             validateSource(source, `${this.name} from ${this.sourcePath}`);

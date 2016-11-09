@@ -3,6 +3,7 @@
 'use strict';
 
 require('dotenv').config({silent: true});
+const os = require('os');
 
 const FASTLY_API_KEY = process.env.FASTLY_API_KEY;
 const DRY_RUN = process.env.DRY_RUN;
@@ -56,10 +57,10 @@ if (!DRY_RUN) {
 			}
 		});
 	}))
-	.then(() => console.log('\nPurged all endpoints successfully.'))
+	.then(() => console.log(`${os.EOL}Purged all endpoints successfully.`))
 	.catch((e) => console.error(`Failed to purge endpoints. ${e}`));
 } else {
-	console.log('\nThis is a dry run. No assets were purged from the cache.\n');
-	console.log('If this were not a dry run, these are the assets which would have been purged from the cache:\n');
+	console.log(`${os.EOL}This is a dry run. No assets were purged from the cache.${os.EOL}`);
+	console.log(`If this were not a dry run, these are the assets which would have been purged from the cache:${os.EOL}`);
 	endpoints.forEach(endpoint => console.log(endpoint));
 }

@@ -1,5 +1,6 @@
 'use strict';
 
+const os = require('os');
 const s3 = new (require('aws-sdk').S3)({ apiVersion: '2006-03-01', region: 'eu-west-1' });
 const MySQL = require('mysql2');
 const denodeify = require('denodeify');
@@ -40,7 +41,7 @@ exports.handle = (event, context) => {
 			console.log('Loaded from S3, size: ' + filestr.length);
 			const records = filestr
 				.trim()
-				.split('\n')
+				.split(os.EOL)
 				.map(line => line
 					.replace(/^.*?\]\: /, '')
 					.split('&')
@@ -96,7 +97,7 @@ exports.handle = (event, context) => {
 					.then(() => s3.deleteObject(s3params).promise().then(() => console.log('Deleted '+key)))
 				;
 			} else {
-				console.log('No records found in log file.  First line:', filestr.split('\n', 2)[0]);
+				console.log('No records found in log file.  First line:', filestr.split(os.EOL, 2)[0]);
 			}
 		})
 		.then(() => {
