@@ -23,3 +23,5 @@ node_modules/
 /polyfills/UserTiming/polyfill.js
 /polyfills/URL/polyfill.js
 .vscode/launch.json
+
+coverage/
