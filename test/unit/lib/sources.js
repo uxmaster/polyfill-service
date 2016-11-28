@@ -22,7 +22,7 @@ describe('lib/sources', () => {
 		fs.readdirSync.returns([]);
 
 		aliases = {};
-		mockery.registerMock(path.join(__dirname, '../../../polyfills/__dist/aliases.json'), aliases);
+		mockery.registerMock('../polyfills/__dist/aliases.json', aliases);
 	});
 
 	it('exports an object', () => {
@@ -47,22 +47,15 @@ describe('lib/sources', () => {
 	it('filters out aliases.json from the polyfill directory', () => {
 		const spy = sinon.spy(Array.prototype, 'filter');
 		sources = require('../../../lib/sources');
-		assert.equal(Array.prototype.filter.firstCall.args[0]('aliases.json'), []);
 		spy.restore();
+		assert.equal(spy.lastCall.args[0]('aliases.json'), []);
 	});
 
 	it('removes .json from the filenames retrieved from the polyfill directory', () => {
 		const spy = sinon.spy(Array.prototype, 'map');
 		sources = require('../../../lib/sources');
-		assert.equal(Array.prototype.map.firstCall.args[0]('example.json'), ['example']);
 		spy.restore();
-	});
-
-	it('removes .json from the filenames retrieved from the polyfill directory', () => {
-		const spy = sinon.spy(Array.prototype, 'map');
-		sources = require('../../../lib/sources');
-		assert.equal(Array.prototype.map.firstCall.args[0]('example.json'), ['example']);
-		spy.restore();
+		assert.equal(spy.lastCall.args[0]('example.json'), ['example']);
 	});
 
 	it('catches errors when reading the polyfill directory and returns a friendly error message. ', () => {
