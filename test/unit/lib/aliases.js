@@ -4,6 +4,7 @@
 const assert = require('proclaim');
 const sinon = require('sinon');
 require('sinon-as-promised');
+const setsToArrays = require('../../utils/sets_to_arrays');
 
 describe('lib/aliases', () => {
 	let aliasResolver;
@@ -74,7 +75,7 @@ describe('lib/aliases', () => {
 								flags: []
 							}
 						}).then(function(resolved) {
-							assert.deepEqual(resolved, {
+							assert.deepEqual(setsToArrays(resolved), {
 								resolved_name_a: {
 									flags: [],
 									aliasOf: ["alias_name_a"]
@@ -105,7 +106,7 @@ describe('lib/aliases', () => {
 								flags: []
 							}
 						}).then(function(resolved) {
-							assert.deepEqual(resolved, {
+							assert.deepEqual(setsToArrays(resolved), {
 								resolved_name_a: {
 									flags: [],
 									aliasOf: ["alias_name_a"]
@@ -138,7 +139,7 @@ describe('lib/aliases', () => {
 								flags: ["gated"]
 							}
 						}).then(function(resolved) {
-							assert.deepEqual(resolved, {
+							assert.deepEqual(setsToArrays(resolved), {
 								resolved_name_a: {
 									flags: ["always"],
 									aliasOf: ["alias_name_a"]
@@ -175,7 +176,7 @@ describe('lib/aliases', () => {
 								flags: ["gated"]
 							}
 						}).then(function(resolved) {
-							assert.deepEqual(resolved, {
+							assert.deepEqual(setsToArrays(resolved), {
 								resolved_name_a: {
 									flags: ["always"],
 									aliasOf: ["alias_name_a"]
@@ -214,7 +215,7 @@ describe('lib/aliases', () => {
 								flags: ["always"]
 							}
 						}).then(function(resolved) {
-							assert.deepEqual(resolved, {
+							assert.deepEqual(setsToArrays(resolved), {
 								resolved_name_a: {
 									flags: ["always"],
 									aliasOf: ["alias_name_a", "first_alias_name_a"]
@@ -243,7 +244,7 @@ describe('lib/aliases', () => {
 								flags: ["gated"]
 							}
 						}).then(function(resolved) {
-							assert.deepEqual(resolved, {
+							assert.deepEqual(setsToArrays(resolved), {
 								resolved_name_a: {
 									flags: ["always"]
 								},
@@ -284,7 +285,7 @@ describe('lib/aliases', () => {
 								flags: ["gated"]
 							}
 						}).then(function(resolved) {
-							assert.deepEqual(resolved, {
+							assert.deepEqual(setsToArrays(resolved), {
 								resolved_name_a: {
 									flags: ["always"],
 									aliasOf: ["alias_name_a", "first_alias_name_a"]
@@ -310,13 +311,13 @@ describe('lib/aliases', () => {
 
 						return resolver({
 							alias_name_a: {
-								flags: ["always"]
+								flags: new Set(["always"])
 							},
 							name_b: {
-								flags: ["gated"]
+								flags: new Set(["gated"])
 							}
 						}).then(function(resolved) {
-							assert.deepEqual(resolved, {
+							assert.deepEqual(setsToArrays(resolved), {
 								name_b: {
 									flags: ["always", "gated"],
 									aliasOf: ['alias_name_a']
@@ -336,28 +337,9 @@ describe('lib/aliases', () => {
 							name_a: {},
 							name_b: {}
 						}).then(function(resolved) {
-							assert.deepEqual(resolved, {
+							assert.deepEqual(setsToArrays(resolved), {
 								name_a: {},
 								name_b: {}
-							});
-						});
-					});
-
-					it('should handle resolvers that return promises', () => {
-						const resolver = aliasResolver([
-							() => {
-								return Promise.resolve(['alias']);
-							}
-						]);
-
-						return resolver({
-							name: {},
-						}).then(function(resolved) {
-							assert.deepEqual(resolved, {
-								alias: {
-									flags: [],
-									aliasOf: ["name"]
-								},
 							});
 						});
 					});
