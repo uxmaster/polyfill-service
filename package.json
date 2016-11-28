@@ -29,7 +29,7 @@
     "container-test": "npm run container-build && docker run -p 3000:3000 -it registry.heroku.com/ft-polyfill-service-qa/web",
     "deploy": "npm run container-build && docker push registry.heroku.com/ft-polyfill-service-qa/web && grunt deployvcl:qa && ./tasks/purge.js",
     "promote": "docker pull registry.heroku.com/ft-polyfill-service-qa/web && docker tag registry.heroku.com/ft-polyfill-service-qa/web registry.heroku.com/ft-polyfill-service/web && docker push registry.heroku.com/ft-polyfill-service/web && grunt deployvcl:prod && NODE_ENV=production ./tasks/purge.js",
-    "test": "grunt test",
+    "test": "npm run test:unit && grunt test",
     "test:unit": "mocha test/unit/*.js test/unit/**/*.js"
   },
   "license": "CC0-1.0",
