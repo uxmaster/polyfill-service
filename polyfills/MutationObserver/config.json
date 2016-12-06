@@ -2,7 +2,7 @@
 	"browsers": {
 		"chrome": "<26",
 		"firefox": "<14",
-		"ie": "9 - 11",
+		"ie": "8 - 11",
 		"opera": "<15",
 		"safari": "<6",
 		"android": "<4.4",
@@ -11,10 +11,6 @@
 		"op_mob": "<15",
 		"ios_saf": "<7"
 	},
-	"dependencies": [
-		"WeakMap",
-		"Event"
-	],
 	"repo": "https://github.com/megawac/MutationObserver.js",
 	"docs": "https://developer.mozilla.org/en/docs/Web/API/MutationObserver",
 	"spec": "https://dom.spec.whatwg.org/#mutationobserver",
