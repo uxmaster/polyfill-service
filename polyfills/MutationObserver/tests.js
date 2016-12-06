@@ -1,3 +1,5 @@
+/* eslint-env mocha */
+/* global proclaim */
 /* Assertion bridge between web components test suite and expectjs */
 
 
@@ -87,7 +89,7 @@ describe('MutationObserver attributes', function() {
 			attributeNamespace: null,
 			oldValue: null
 		});
-		
+
 		expectRecord(records[1], {
 			type: 'attributes',
 			target: div,
