@@ -15,10 +15,12 @@
 		"WeakMap",
 		"Event"
 	],
-	"repo": "https://github.com/webcomponents/webcomponentsjs",
+	"repo": "https://github.com/megawac/MutationObserver.js",
 	"docs": "https://developer.mozilla.org/en/docs/Web/API/MutationObserver",
 	"spec": "https://dom.spec.whatwg.org/#mutationobserver",
-	"notes": [
-		"Also creates a non-spec global `JsMutationObserver`, which is a reference to the same contructor"
-	]
+	"license": "WTFPL",
+	"install": {
+		"module": "mutationobserver-shim",
+		"paths": ["MutationObserver.js"]
+	}
 }

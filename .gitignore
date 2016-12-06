@@ -19,6 +19,7 @@ polyfills/IntersectionObserver/polyfill.js
 polyfills/Intl/polyfill.js
 polyfills/Intl/~locale/**
 polyfills/JSON/polyfill.js
+polyfills/MutationObserver/polyfill.js
 polyfills/Promise/polyfill.js
 polyfills/URL/polyfill.js
 polyfills/UserTiming/polyfill.js
