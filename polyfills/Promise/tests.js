@@ -247,7 +247,7 @@ describe('finally' , function() {
 			});
 	});
 
-	it("rejects with rejection value if finally method doesn't throw", "error", function () {
+	it("rejects with rejection value if finally method doesn't throw", function () {
 			return Promise.reject("error").finally(function () {
 			}).catch(function(val) {
 				proclaim.equal(val, 'error');
