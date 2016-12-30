@@ -97,7 +97,7 @@
     "tsort": "0.0.1",
     "useragent": "^2.1.9",
     "usertiming": "^0.1.8",
-    "yaku": "^0.17.3"
+    "yaku": "^0.17.4"
   },
   "devDependencies": {
     "batch": "^0.5.1",
